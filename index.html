@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aisha Visuals — Premium Product Photography</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --ivory: #FAF8F4;
+    --beige: #E8DDD0;
+    --sand: #D4C4B0;
+    --brown: #8B6F5E;
+    --dark-brown: #4A3728;
+    --espresso: #2C1F16;
+    --black: #1A1410;
+    --warm-white: #FDFBF8;
+    --gold: #C9A96E;
+    --gold-light: #E8D5A8;
+    --text-muted: #9B8B7E;
+    --text-body: #5C4A3E;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--ivory);
+    color: var(--black);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    opacity: 0.5;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Loader */
+  #loader {
+    position: fixed; inset: 0;
+    background: var(--espresso);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-inner {
+    text-align: center;
+  }
+  .loader-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    animation: fadeInUp 0.8s ease both;
+  }
+  .loader-line {
+    width: 0; height: 1px;
+    background: var(--gold);
+    margin: 16px auto 0;
+    animation: expandLine 1.5s ease 0.5s both;
+  }
+  @keyframes expandLine { to { width: 200px; } }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.5s ease;
+  }
+  nav.scrolled {
+    background: rgba(250, 248, 244, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 16px 5%;
+    border-bottom: 1px solid var(--beige);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--warm-white);
+    text-decoration: none;
+    transition: color 0.4s;
+  }
+  nav.scrolled .nav-logo { color: var(--espresso); }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem; font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(253,251,248,0.75);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  nav.scrolled .nav-links a { color: var(--text-muted); }
+  .nav-links a:hover, nav.scrolled .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    font-size: 0.7rem; font-weight: 400;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 10px 22px;
+    border: 1px solid rgba(201,169,110,0.6);
+    color: var(--gold-light) !important;
+    border-radius: 2px;
+    transition: all 0.3s ease !important;
+  }
+  nav.scrolled .nav-cta { color: var(--gold) !important; border-color: var(--gold); }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--espresso) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 1px; background: var(--warm-white); transition: 0.3s; display: block; }
+  nav.scrolled .hamburger span { background: var(--espresso); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+    background: var(--espresso);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; opacity: 0.18;
+  }
+  .hero-bg-img {
+    background-size: cover; background-position: center;
+    filter: sepia(40%);
+  }
+  .hero-bg-img:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=70'); }
+  .hero-bg-img:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1611068661827-0f8d9d83f1d1?w=600&q=70'); }
+  .hero-bg-img:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1596803244897-5a28d9b7e5cd?w=600&q=70'); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(44,31,22,0.92) 0%, rgba(44,31,22,0.75) 50%, rgba(44,31,22,0.88) 100%);
+  }
+  .hero-grain {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 8%;
+    max-width: 900px;
+  }
+  .hero-eyebrow {
+    font-size: 0.68rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 28px;
+    opacity: 0; animation: fadeInUp 0.8s ease 1.2s both;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 300; line-height: 1.05;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeInUp 0.9s ease 1.4s both;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: 1rem; font-weight: 300;
+    line-height: 1.8; color: rgba(245,240,232,0.65);
+    letter-spacing: 0.04em;
+    max-width: 520px; margin-bottom: 52px;
+    opacity: 0; animation: fadeInUp 0.9s ease 1.6s both;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeInUp 0.9s ease 1.8s both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 36px;
+    background: var(--gold);
+    color: var(--espresso);
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; border: none;
+    border-radius: 2px; cursor: none;
+    transition: all 0.35s ease;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%); transition: 0.35s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,169,110,0.3); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 15px 36px;
+    border: 1px solid rgba(245,240,232,0.35);
+    color: var(--cream);
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 400;
+    text-decoration: none; border-radius: 2px; cursor: none;
+    transition: all 0.35s ease;
+  }
+  .btn-secondary:hover {
+    border-color: var(--gold); color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+    z-index: 2; text-align: center;
+    opacity: 0; animation: fadeInUp 1s ease 2.2s both;
+  }
+  .hero-scroll span {
+    display: block; font-size: 0.6rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: rgba(245,240,232,0.4);
+    margin-bottom: 12px;
+  }
+  .scroll-line {
+    width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent);
+    margin: 0 auto;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.5; }
+    50% { transform: scaleY(0.6); opacity: 1; }
+  }
+  .hero-stat-strip {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 0;
+    opacity: 0; animation: fadeInRight 1s ease 2s both;
+    z-index: 2;
+  }
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(30px) translateY(-50%); }
+    to { opacity: 1; transform: translateX(0) translateY(-50%); }
+  }
+  .stat-item {
+    padding: 28px 32px;
+    border-left: 1px solid rgba(201,169,110,0.2);
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 300;
+    color: var(--gold); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(245,240,232,0.4);
+  }
+
+  /* SECTIONS SHARED */
+  section { padding: 120px 8%; }
+  .section-tag {
+    font-size: 0.65rem; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--espresso); letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--brown); }
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ABOUT */
+  #about { background: var(--warm-white); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1.1fr;
+    gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-main-img {
+    width: 100%; aspect-ratio: 3/4;
+    object-fit: cover; display: block;
+    background: var(--beige);
+    background-image: url('https://images.unsplash.com/photo-1611068661827-0f8d9d83f1d1?w=700&q=80');
+    background-size: cover; background-position: center;
+    border-radius: 2px;
+  }
+  .about-img-accent {
+    position: absolute; bottom: -28px; right: -28px;
+    width: 55%; aspect-ratio: 1;
+    background-image: url('https://images.unsplash.com/photo-1596703263926-eb0762ee17e4?w=400&q=80');
+    background-size: cover; background-position: center;
+    border: 8px solid var(--warm-white);
+    border-radius: 2px;
+    box-shadow: 0 20px 60px rgba(44,31,22,0.12);
+  }
+  .about-img-tag {
+    position: absolute; top: -16px; left: -16px;
+    padding: 14px 20px;
+    background: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; font-weight: 500;
+    color: var(--espresso); letter-spacing: 0.05em;
+    border-radius: 2px;
+    box-shadow: 0 8px 24px rgba(201,169,110,0.3);
+  }
+  .about-text p {
+    font-size: 1.05rem; font-weight: 300;
+    line-height: 1.9; color: var(--text-body);
+    letter-spacing: 0.02em; margin-bottom: 20px;
+  }
+  .about-pills {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px;
+  }
+  .pill {
+    padding: 8px 18px;
+    border: 1px solid var(--sand);
+    border-radius: 50px;
+    font-size: 0.72rem; letter-spacing: 0.1em;
+    color: var(--brown); font-weight: 400;
+    transition: all 0.3s;
+  }
+  .pill:hover { background: var(--gold); border-color: var(--gold); color: var(--espresso); }
+  .about-signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-style: italic;
+    color: var(--gold); margin-top: 36px;
+    opacity: 0.8;
+  }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--cream); }
+  .portfolio-header { max-width: 700px; margin-bottom: 64px; }
+  .portfolio-header p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 14px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .gallery-item {
+    overflow: hidden; position: relative;
+    border-radius: 2px; cursor: none;
+    background: var(--sand);
+  }
+  .gallery-item:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+  .gallery-item:nth-child(2) { grid-column: span 4; }
+  .gallery-item:nth-child(3) { grid-column: span 3; }
+  .gallery-item:nth-child(4) { grid-column: span 4; }
+  .gallery-item:nth-child(5) { grid-column: span 3; }
+  .gallery-item:nth-child(6) { grid-column: span 4; }
+  .gallery-item:nth-child(7) { grid-column: span 7; }
+  .gallery-img {
+    width: 100%; height: 100%; min-height: 260px;
+    object-fit: cover; display: block;
+    background-size: cover; background-position: center;
+    transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s ease;
+    filter: sepia(8%) saturate(0.9);
+  }
+  .gallery-item:hover .gallery-img {
+    transform: scale(1.07); filter: sepia(0%) saturate(1);
+  }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(44,31,22,0.85) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.4s ease;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 400;
+    color: var(--cream); margin-bottom: 4px;
+  }
+  .gallery-sublabel {
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  /* Photo backgrounds */
+  .g1 { background-image: url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80'); }
+  .g2 { background-image: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80'); }
+  .g3 { background-image: url('https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80'); }
+  .g4 { background-image: url('https://images.unsplash.com/photo-1583241475880-083f84372725?w=700&q=80'); }
+  .g5 { background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80'); }
+  .g6 { background-image: url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?w=700&q=80'); }
+  .g7 { background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80'); }
+
+  /* BRANDS */
+  #brands { background: var(--warm-white); }
+  .brands-intro { max-width: 600px; margin-bottom: 64px; }
+  .brands-intro p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; }
+  .brands-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px; max-width: 1100px; margin: 0 auto;
+  }
+  .brand-card {
+    background: var(--ivory);
+    border: 1px solid var(--beige);
+    border-radius: 4px; overflow: hidden;
+    transition: all 0.4s ease;
+    cursor: none;
+  }
+  .brand-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 20px 60px rgba(44,31,22,0.08);
+    transform: translateY(-4px);
+  }
+  .brand-img {
+    width: 100%; height: 220px;
+    background-size: cover; background-position: center;
+    position: relative; overflow: hidden;
+    filter: sepia(10%) saturate(0.85);
+    transition: filter 0.4s;
+  }
+  .brand-card:hover .brand-img { filter: sepia(0%) saturate(1); }
+  .b1 { background-image: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80'); }
+  .b2 { background-image: url('https://images.unsplash.com/photo-1556228720-195a672e8a03?w=700&q=80'); }
+  .b3 { background-image: url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=700&q=80'); }
+  .b4 { background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=700&q=80'); }
+  .brand-badge {
+    position: absolute; top: 16px; left: 16px;
+    width: 48px; height: 48px;
+    background: rgba(44,31,22,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-badge-inner {
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-badge-inner span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem; color: var(--gold); font-weight: 500;
+  }
+  .brand-body { padding: 24px 28px 28px; }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 500;
+    color: var(--espresso); margin-bottom: 8px; letter-spacing: 0.02em;
+  }
+  .brand-desc {
+    font-size: 0.82rem; line-height: 1.7;
+    color: var(--text-muted); letter-spacing: 0.03em;
+  }
+  .brand-tag {
+    display: inline-block; margin-top: 14px;
+    padding: 5px 14px;
+    border: 1px solid var(--sand); border-radius: 50px;
+    font-size: 0.65rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--brown);
+  }
+
+  /* SERVICES */
+  #services { background: var(--espresso); }
+  #services .section-tag { color: var(--gold); }
+  #services .section-tag::before { background: var(--gold); }
+  #services .section-title { color: var(--cream); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(201,169,110,0.15);
+    border: 1px solid rgba(201,169,110,0.15);
+    max-width: 1200px; margin: 0 auto;
+  }
+  .service-card {
+    padding: 48px 36px;
+    background: var(--espresso);
+    transition: background 0.35s ease;
+    cursor: none; position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: rgba(201,169,110,0.05); }
+  .service-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 28px;
+    color: var(--gold); opacity: 0.8;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400;
+    color: var(--cream); margin-bottom: 14px;
+  }
+  .service-desc {
+    font-size: 0.82rem; line-height: 1.8;
+    color: rgba(245,240,232,0.45); letter-spacing: 0.03em;
+  }
+  .service-num {
+    position: absolute; bottom: 24px; right: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300;
+    color: rgba(201,169,110,0.08); line-height: 1;
+  }
+
+  /* WHY CHOOSE ME */
+  #why { background: var(--cream); }
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto;
+  }
+  .why-img {
+    position: relative;
+  }
+  .why-main-img {
+    width: 100%; aspect-ratio: 4/5;
+    background-image: url('https://images.unsplash.com/photo-1596703263926-eb0762ee17e4?w=700&q=80');
+    background-size: cover; background-position: center;
+    border-radius: 2px;
+    filter: sepia(8%) saturate(0.9);
+  }
+  .why-float-card {
+    position: absolute; bottom: -20px; right: -28px;
+    padding: 24px 28px;
+    background: var(--espresso);
+    border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(44,31,22,0.2);
+    min-width: 200px;
+  }
+  .why-float-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--gold);
+    line-height: 1; margin-bottom: 6px;
+  }
+  .why-float-text {
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(245,240,232,0.5);
+  }
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+  .why-item {
+    display: flex; align-items: flex-start; gap: 20px;
+    padding: 28px 0; border-bottom: 1px solid var(--beige);
+    transition: padding-left 0.3s ease;
+  }
+  .why-item:hover { padding-left: 8px; }
+  .why-item:last-child { border-bottom: none; }
+  .why-icon-wrap {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border: 1px solid var(--sand); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); transition: all 0.3s;
+  }
+  .why-item:hover .why-icon-wrap { background: var(--gold); border-color: var(--gold); color: var(--espresso); }
+  .why-item-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 500; color: var(--espresso);
+    margin-bottom: 6px;
+  }
+  .why-item-desc {
+    font-size: 0.82rem; line-height: 1.7; color: var(--text-muted);
+  }
+
+  /* TESTIMONIALS */
+  #testimonials { background: var(--espresso); overflow: hidden; }
+  #testimonials .section-tag { color: var(--gold); }
+  #testimonials .section-tag::before { background: var(--gold); }
+  #testimonials .section-title { color: var(--cream); }
+  .testi-track-wrap {
+    overflow: hidden; margin: 0 -8%; padding: 0 8%;
+  }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 20px; max-width: 1200px; margin: 0 auto;
+  }
+  .testi-card {
+    padding: 44px;
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 4px;
+    transition: border-color 0.4s, transform 0.4s;
+    cursor: none; position: relative;
+  }
+  .testi-card::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem; line-height: 0.5;
+    color: rgba(201,169,110,0.08);
+    position: absolute; top: 40px; right: 36px;
+    pointer-events: none;
+  }
+  .testi-card:hover {
+    border-color: rgba(201,169,110,0.4);
+    transform: translateY(-4px);
+  }
+  .testi-stars {
+    display: flex; gap: 4px; margin-bottom: 24px;
+    color: var(--gold);
+  }
+  .testi-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-weight: 300; font-style: italic;
+    line-height: 1.75; color: var(--cream);
+    margin-bottom: 32px; letter-spacing: 0.01em;
+  }
+  .testi-divider {
+    width: 40px; height: 1px; background: var(--gold);
+    opacity: 0.4; margin-bottom: 20px;
+  }
+  .testi-author {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(245,240,232,0.4);
+  }
+  .testi-author strong {
+    font-weight: 500; color: var(--gold-light);
+    display: block; margin-bottom: 4px;
+  }
+
+  /* CTA BANNER */
+  #cta-banner {
+    padding: 140px 8%;
+    background: var(--dark-brown);
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .cta-bg-text {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(5rem, 14vw, 18rem);
+    font-weight: 300; color: rgba(255,255,255,0.025);
+    white-space: nowrap; pointer-events: none;
+    letter-spacing: -0.03em; line-height: 1;
+  }
+  #cta-banner .section-tag { justify-content: center; }
+  #cta-banner .section-tag::before { display: none; }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--cream); max-width: 800px;
+    margin: 0 auto 20px; letter-spacing: -0.01em;
+  }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-sub {
+    font-size: 0.9rem; color: rgba(245,240,232,0.45);
+    letter-spacing: 0.08em; margin-bottom: 48px;
+  }
+  .btn-whatsapp {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 20px 48px;
+    background: var(--gold);
+    color: var(--espresso);
+    font-size: 0.8rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; border-radius: 2px;
+    transition: all 0.35s; cursor: none;
+    box-shadow: 0 12px 40px rgba(201,169,110,0.25);
+  }
+  .btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(201,169,110,0.35);
+    background: var(--gold-light);
+  }
+
+  /* CONTACT */
+  #contact { background: var(--warm-white); }
+  .contact-inner {
+    max-width: 700px; margin: 0 auto; text-align: center;
+  }
+  .contact-inner p {
+    font-size: 1rem; font-weight: 300; line-height: 1.9;
+    color: var(--text-body); margin-bottom: 40px;
+  }
+  .contact-actions {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    padding: 60px 8% 36px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 48px; margin-bottom: 56px;
+  }
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 400;
+    color: var(--cream); letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .footer-brand-desc {
+    font-size: 0.8rem; line-height: 1.8;
+    color: rgba(245,240,232,0.3); max-width: 260px;
+  }
+  .footer-col-title {
+    font-size: 0.62rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a {
+    font-size: 0.8rem; color: rgba(245,240,232,0.35);
+    text-decoration: none; letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    padding-top: 28px;
+    border-top: 1px solid rgba(245,240,232,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-copy {
+    font-size: 0.72rem; color: rgba(245,240,232,0.2);
+    letter-spacing: 0.08em;
+  }
+  .footer-social {
+    display: flex; gap: 20px;
+  }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,240,232,0.3);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    position: fixed; inset: 0;
+    background: var(--espresso);
+    z-index: 999; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 40px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300;
+    color: var(--cream); text-decoration: none;
+    letter-spacing: 0.08em; transition: color 0.3s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+  .mobile-close {
+    position: absolute; top: 24px; right: 5%;
+    font-size: 1.6rem; color: var(--cream);
+    background: none; border: none;
+    cursor: pointer; font-weight: 300;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .about-grid, .why-grid { grid-template-columns: 1fr; gap: 56px; }
+    .about-img-wrap { max-width: 460px; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-stat-strip { display: none; }
+    .gallery-grid { display: flex; flex-wrap: wrap; }
+    .gallery-item { width: calc(50% - 7px); min-height: 220px; }
+    .brands-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    section { padding: 80px 5%; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { padding: 0 5%; }
+    .hero-title { font-size: 2.8rem; }
+    .hero-btns { flex-direction: column; max-width: 260px; }
+    .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .gallery-item { width: 100%; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-title { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-text">Aisha Visuals</div>
+    <div class="loader-line"></div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Aisha Visuals</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="https://wa.me/917068688498" target="_blank" class="nav-cta">Let's Work</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#portfolio" onclick="closeMobile()">Portfolio</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#testimonials" onclick="closeMobile()">Reviews</a>
+  <a href="https://wa.me/917068688498" target="_blank">WhatsApp</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-img"></div>
+    <div class="hero-bg-img"></div>
+    <div class="hero-bg-img"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Product Photography & Brand Content</div>
+    <h1 class="hero-title">
+      Turning Products<br>Into <em>Premium</em><br>Visuals
+    </h1>
+    <p class="hero-sub">Professional product photography & aesthetic brand content for Instagram, websites & ads.</p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        View Portfolio
+      </a>
+      <a href="https://wa.me/917068688498" target="_blank" class="btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.544 4.12 1.5 5.856L0 24l6.326-1.485A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.924 0-3.72-.5-5.28-1.376l-.38-.22-3.938.925.943-3.84-.247-.39A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-stat-strip">
+    <div class="stat-item">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Projects Done</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">Brands Served</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Satisfaction</div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <div class="about-main-img"></div>
+      <div class="about-img-accent"></div>
+      <div class="about-img-tag">✦ Visual Creator</div>
+    </div>
+    <div class="about-text">
+      <div class="section-tag reveal">About Me</div>
+      <h2 class="section-title reveal reveal-delay-1">
+        Where Craft Meets<br><em>Aesthetic Vision</em>
+      </h2>
+      <p class="reveal reveal-delay-2">I help small brands create premium-looking product photos and reels that attract customers and improve brand presence online.</p>
+      <p class="reveal reveal-delay-2">From gift products to cafés, skincare, accessories and lifestyle brands — I create aesthetic visuals that make products stand out and tell a story worth sharing.</p>
+      <p class="reveal reveal-delay-3">Every shot is carefully composed with natural light, minimal props, and a deep understanding of what looks beautiful on Instagram, websites and ads.</p>
+      <div class="about-pills reveal reveal-delay-3">
+        <span class="pill">Gift Packaging</span>
+        <span class="pill">Skincare</span>
+        <span class="pill">Café & Food</span>
+        <span class="pill">Jewelry</span>
+        <span class="pill">Flatlays</span>
+        <span class="pill">Lifestyle</span>
+        <span class="pill">Reels</span>
+      </div>
+      <div class="about-signature reveal reveal-delay-4">— Aisha</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header">
+    <div class="section-tag reveal">Portfolio</div>
+    <h2 class="section-title reveal reveal-delay-1">Selected <em>Works</em></h2>
+    <p class="reveal reveal-delay-2">A curated selection of product photography and brand content. Each image tells a story of premium quality and aesthetic refinement.</p>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item">
+      <div class="gallery-img g1"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Gift Box Collection</div>
+        <div class="gallery-sublabel">Packaging · Lifestyle</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g2"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Café Aesthetic</div>
+        <div class="gallery-sublabel">Coffee · Food</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g3"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Skincare Visuals</div>
+        <div class="gallery-sublabel">Beauty · Product</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g4"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Product Detail</div>
+        <div class="gallery-sublabel">Macro · Commercial</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g5"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Jewelry & Accessories</div>
+        <div class="gallery-sublabel">Minimal · Elegant</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g6"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Packaging Aesthetics</div>
+        <div class="gallery-sublabel">Brand · Identity</div>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-img g7"></div>
+      <div class="gallery-overlay">
+        <div class="gallery-label">Flatlay Stories</div>
+        <div class="gallery-sublabel">Lifestyle · Instagram</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<section id="brands">
+  <div class="brands-intro">
+    <div class="section-tag reveal">Collaborations</div>
+    <h2 class="section-title reveal reveal-delay-1">Brands I've<br><em>Worked With</em></h2>
+    <p class="reveal reveal-delay-2">Small brands, big visions. Here's how we've brought their products to life together.</p>
+  </div>
+  <div class="brands-grid">
+    <div class="brand-card reveal">
+      <div class="brand-img b1">
+        <div class="brand-badge">
+          <div class="brand-badge-inner"><span>BB</span></div>
+        </div>
+      </div>
+      <div class="brand-body">
+        <div class="brand-name">BrewBakes Café</div>
+        <div class="brand-desc">Aesthetic café product photography & Instagram content — capturing the warmth of every brew.</div>
+        <span class="brand-tag">Photography · Content</span>
+      </div>
+    </div>
+    <div class="brand-card reveal reveal-delay-1">
+      <div class="brand-img b2">
+        <div class="brand-badge">
+          <div class="brand-badge-inner"><span>VG</span></div>
+        </div>
+      </div>
+      <div class="brand-body">
+        <div class="brand-name">Velvet Glow Skincare</div>
+        <div class="brand-desc">Luxury skincare product visuals — clean, minimal, and radiantly aspirational.</div>
+        <span class="brand-tag">Product · Beauty</span>
+      </div>
+    </div>
+    <div class="brand-card reveal reveal-delay-2">
+      <div class="brand-img b3">
+        <div class="brand-badge">
+          <div class="brand-badge-inner"><span>AG</span></div>
+        </div>
+      </div>
+      <div class="brand-body">
+        <div class="brand-name">Aura Gifts Studio</div>
+        <div class="brand-desc">Elegant gift box and packaging photography — making every unboxing a luxury moment.</div>
+        <span class="brand-tag">Packaging · Gifting</span>
+      </div>
+    </div>
+    <div class="brand-card reveal reveal-delay-3">
+      <div class="brand-img b4">
+        <div class="brand-badge">
+          <div class="brand-badge-inner"><span>MA</span></div>
+        </div>
+      </div>
+      <div class="brand-body">
+        <div class="brand-name">Moonlit Accessories</div>
+        <div class="brand-desc">Minimal jewelry and accessories shoot — delicate compositions with editorial grace.</div>
+        <span class="brand-tag">Jewelry · Minimal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="max-width:700px; margin-bottom: 64px;">
+    <div class="section-tag reveal">Services</div>
+    <h2 class="section-title reveal reveal-delay-1">What I <em>Create</em><br>For Your Brand</h2>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+      </svg>
+      <div class="service-name">Product Photography</div>
+      <div class="service-desc">Studio-quality product shots with careful lighting, composition, and post-processing for a premium look.</div>
+      <div class="service-num">01</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+      </svg>
+      <div class="service-name">Aesthetic Reels</div>
+      <div class="service-desc">Short-form video content for Instagram Reels — trendy transitions, satisfying visuals, and on-brand edits.</div>
+      <div class="service-num">02</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+      <div class="service-name">Instagram Content</div>
+      <div class="service-desc">Full content packages for your feed — cohesive aesthetics, consistent color palettes, scroll-stopping images.</div>
+      <div class="service-num">03</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+      <div class="service-name">Brand Visuals</div>
+      <div class="service-desc">Comprehensive visual identity support — banners, story templates, and website-ready imagery.</div>
+      <div class="service-num">04</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+      </svg>
+      <div class="service-name">Packaging Shoots</div>
+      <div class="service-desc">Dedicated packaging and unboxing photography — showcasing your product's premium presentation.</div>
+      <div class="service-num">05</div>
+    </div>
+    <div class="service-card">
+      <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      <div class="service-name">Café Photography</div>
+      <div class="service-desc">Warm, inviting café and food photography that makes every drink and dish look irresistible online.</div>
+      <div class="service-num">06</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE ME -->
+<section id="why">
+  <div class="why-grid">
+    <div class="why-img reveal">
+      <div class="why-main-img"></div>
+      <div class="why-float-card">
+        <div class="why-float-num">48h</div>
+        <div class="why-float-text">Average Delivery</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-tag reveal">Why Choose Me</div>
+      <h2 class="section-title reveal reveal-delay-1">Premium Quality,<br><em>Real Results</em></h2>
+      <ul class="why-list">
+        <li class="why-item reveal reveal-delay-1">
+          <div class="why-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <div>
+            <div class="why-item-title">Affordable Pricing</div>
+            <div class="why-item-desc">Premium-looking visuals at prices that make sense for small brands and startups.</div>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-2">
+          <div class="why-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="why-item-title">Fast Delivery</div>
+            <div class="why-item-desc">Edited and delivered within 24-48 hours. Your brand content, ready when you need it.</div>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-2">
+          <div class="why-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="why-item-title">Trendy Aesthetic Editing</div>
+            <div class="why-item-desc">Editing styles that are current, vibrant, and perfectly tuned for Instagram performance.</div>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-3">
+          <div class="why-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div>
+            <div class="why-item-title">Social Media Focused</div>
+            <div class="why-item-desc">Every visual is designed for performance — optimal dimensions, engaging compositions, brand storytelling.</div>
+          </div>
+        </li>
+        <li class="why-item reveal reveal-delay-4">
+          <div class="why-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div>
+            <div class="why-item-title">Satisfaction Guaranteed</div>
+            <div class="why-item-desc">We work together until you're completely happy with the results. Your vision is my priority.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div style="max-width: 600px; margin-bottom: 64px;">
+    <div class="section-tag reveal">Testimonials</div>
+    <h2 class="section-title reveal reveal-delay-1">Words From<br><em>Happy Clients</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"The photos made our products look so premium. Our Instagram engagement increased a lot after we started using these visuals."</div>
+      <div class="testi-divider"></div>
+      <div class="testi-author"><strong>BrewBakes Café</strong>Café · Food Photography Client</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Exactly the classy aesthetic we wanted for our skincare brand. The shots were clean, minimal, and absolutely beautiful."</div>
+      <div class="testi-divider"></div>
+      <div class="testi-author"><strong>Velvet Glow Skincare</strong>Skincare · Beauty Brand</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Professional work, affordable pricing and amazing creativity. Our packaging has never looked this good in photos before."</div>
+      <div class="testi-divider"></div>
+      <div class="testi-author"><strong>Aura Gifts Studio</strong>Gifting · Packaging Brand</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Loved the reel edits and product shots. Very aesthetic and clean — exactly what our jewelry brand needed to grow online."</div>
+      <div class="testi-divider"></div>
+      <div class="testi-author"><strong>Moonlit Accessories</strong>Jewelry · Accessories Brand</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section id="cta-banner">
+  <div class="cta-bg-text">Premium</div>
+  <div class="section-tag reveal" style="justify-content:center;">Ready to Elevate?</div>
+  <h2 class="cta-title reveal reveal-delay-1">Let's Make Your Brand<br>Look <em>Premium</em></h2>
+  <p class="cta-sub reveal reveal-delay-2">One message is all it takes. Let's create something beautiful together.</p>
+  <a href="https://wa.me/917068688498?text=Hi!%20I%20saw%20your%20portfolio%20and%20would%20love%20to%20discuss%20a%20project." 
+     target="_blank" class="btn-whatsapp reveal reveal-delay-3">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.544 4.12 1.5 5.856L0 24l6.326-1.485A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.924 0-3.72-.5-5.28-1.376l-.38-.22-3.938.925.943-3.84-.247-.39A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    Chat on WhatsApp
+  </a>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-tag reveal" style="justify-content:center;">Get In Touch</div>
+    <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">Start Your<br><em>Project Today</em></h2>
+    <p class="reveal reveal-delay-2">Have a brand, product, or idea? I'd love to hear about it. Drop me a message on WhatsApp and let's create something stunning together.</p>
+    <div class="contact-actions reveal reveal-delay-3">
+      <a href="https://wa.me/917068688498?text=Hi!%20I%20want%20to%20book%20a%20product%20shoot." 
+         target="_blank" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.544 4.12 1.5 5.856L0 24l6.326-1.485A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.924 0-3.72-.5-5.28-1.376l-.38-.22-3.938.925.943-3.84-.247-.39A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        WhatsApp: +91 70686 88498
+      </a>
+      <a href="https://instagram.com" target="_blank" class="btn-secondary" style="color: var(--espresso); border-color: var(--sand);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Aisha Visuals</div>
+      <p class="footer-brand-desc">Premium product photography & aesthetic brand content for small businesses across India.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
+        <li><a href="https://wa.me/917068688498" target="_blank">WhatsApp</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#services">Services</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Aisha Visuals. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="https://instagram.com" target="_blank" class="social-link" aria-label="Instagram">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://wa.me/917068688498" target="_blank" class="social-link" aria-label="WhatsApp">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.544 4.12 1.5 5.856L0 24l6.326-1.485A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.924 0-3.72-.5-5.28-1.376l-.38-.22-3.938.925.943-3.84-.247-.39A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 2000);
+  });
+
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .gallery-item, .brand-card, .service-card, .testi-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '18px'; cursor.style.height = '18px';
+      ring.style.width = '54px'; ring.style.height = '54px'; ring.style.opacity = '0.3';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px';
+      ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '0.5';
+    });
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.add('open');
+  });
+  document.getElementById('mobileClose').addEventListener('click', closeMobile);
+  function closeMobile() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Hide cursor on mobile
+  if ('ontouchstart' in window) {
+    cursor.style.display = 'none';
+    ring.style.display = 'none';
+    document.body.style.cursor = 'auto';
+    document.querySelectorAll('*').forEach(el => el.style.cursor = '');
+  }
+</script>
+</body>
+</html>
